@@ -16,7 +16,6 @@ html {
 
 .player-div {
   display: flex;
-  justify-content: center;
   flex-direction: column;
   background-color: rgb(47, 50, 55);
   width: 400px;
@@ -28,17 +27,29 @@ html {
 
 .player-div input {
   border: none;
-  background-color: transparent;
   resize: none;
   outline: none;
   color: white;
+  width: 100%;
+}
+
+.score-input-div {
+  display: flex;
+  flex-direction: row;
 }
 
 .player-title-input {
   font-size: 50px;
+  text-align: center;
+  background-color: transparent;
+  margin: 4px;
 }
 .player-score-input {
   font-size: 40px;
+  background-color: black;
+  border-radius: 10px;
+  width: 10px;
+  margin: 4px;
 }
 .player-notes-input {
   height: 500px;
@@ -46,6 +57,17 @@ html {
   background-color: black;
   color: white;
   border: none;
+  border-radius: 10px;
   resize: none;
   outline: none;
+  margin: 4px;
+
+}
+
+button {
+  font-size: 30px;
+  width: 250px;
+  background: none;
+  color: white;
+  border: none;
 }
