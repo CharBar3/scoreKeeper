@@ -2,7 +2,7 @@
 
 ## About
 
-scoreKeeper is an ap designed to help you keep score when playing games with your friends! It's currently a work in progress but there is a working useable version you can use here
+scoreKeeper is an app designed to help you keep score when playing boardgames with your friends! It's currently a work in progress but there is a working version you can check out [here](https://scorekeeper-charbar3.netlify.app/)
 
 ## Technologies Used
 
