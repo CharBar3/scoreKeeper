@@ -8,13 +8,15 @@ function App() {
     const [players, setPlayers] = useState(
         [
             {
+                showBack: false,
                 playerName: "Player 1",
-                playerScore: 0,
+                playerScore: [0],
                 notes: "notes"
             },
             {
+                showBack: true,
                 playerName: "Player 2",
-                playerScore: 0,
+                playerScore: [0],
                 notes: "notes"
             }
         ]
@@ -68,7 +70,7 @@ function App() {
         <button onClick={() => removePlayer()}>Remove Player</button>
       </div>
       <div id='show-players-div'>
-        <PlayerCards players={players} updatePlayer={updatePlayer} removeSpecificPlayer={removeSpecificPlayer} addPlayer={addPlayer} removePlayer={removePlayer}/>
+        <PlayerCards players={players} setPlayers={setPlayers} updatePlayer={updatePlayer} removeSpecificPlayer={removeSpecificPlayer} addPlayer={addPlayer} removePlayer={removePlayer}/>
       </div>
     </div>
   );
