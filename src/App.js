@@ -1,23 +1,75 @@
-import logo from './logo.svg';
 import './App.css';
+import PlayerCards from './components/PlayerCards';
+import { useState } from "react"
 
 function App() {
+
+  const [playerCount, setPlayerCount] = useState(2)
+    const [players, setPlayers] = useState(
+        [
+            {
+                playerName: "Player 1",
+                playerScore: 0,
+                notes: "notes"
+            },
+            {
+                playerName: "Player 2",
+                playerScore: 0,
+                notes: "notes"
+            }
+        ]
+    )
+
+    const updatePlayer = (e, index) => {
+        setPlayers(prevState => {
+            let newState = prevState
+            newState[index][e.target.name] = e.target.value
+            return (
+            [...newState]
+            )
+        })
+    }
+    const addPlayer = () => {
+        setPlayers(prevState => {
+            prevState.push({
+                playerName: `Player ${playerCount + 1}`,
+                playerScore: 0,
+                notes: "notes"
+            })
+            return prevState
+        })
+        setPlayerCount(playerCount + 1)
+    }
+    const removePlayer = () => {
+        setPlayers(prevState => {
+            prevState.pop()
+            return prevState
+        })
+        if (playerCount > 0) {
+            setPlayerCount(playerCount - 1)
+        }
+    }
+    const removeSpecificPlayer = (e) => {
+
+        let message = window.confirm("are you sure?")
+
+        if (message === true) {
+            console.log("delete player")
+        } else {
+            console.log("don't delete player")
+        }
+    }  
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Score Keeper</h1>
+      <div id='button-div'>
+        <button onClick={() => addPlayer()}>Add Player</button>
+        <button onClick={() => removePlayer()}>Remove Player</button>
+      </div>
+      <div id='show-players-div'>
+        <PlayerCards players={players} updatePlayer={updatePlayer} removeSpecificPlayer={removeSpecificPlayer} addPlayer={addPlayer} removePlayer={removePlayer}/>
+      </div>
     </div>
   );
 }
