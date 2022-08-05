@@ -34,8 +34,9 @@ function App() {
     const addPlayer = () => {
         setPlayers(prevState => {
             prevState.push({
+                showBack: false,
                 playerName: `Player ${playerCount + 1}`,
-                playerScore: 0,
+                playerScore: [0],
                 notes: "notes"
             })
             return prevState
