@@ -11,7 +11,8 @@ const PlayerCards = ({players, setPlayers}) => {
 
         scoreChange = Number.parseInt(scoreChange)
         e.preventDefault()
-        if (scoreChange !== 0) {
+        console.log(typeof scoreChange)
+        if (scoreChange !== 0 && typeof scoreChange === 'number') {
             if (addOrSubtract === 'add') {
                 setPlayers(prevState => {
                     let newState = prevState
