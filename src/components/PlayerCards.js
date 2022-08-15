@@ -1,21 +1,148 @@
-import { Typography, Card, CardHeader, CardContent, TextField, Button, CardActions, ButtonGroup } from "@mui/material"
+import { Typography, Card, CardHeader, CardContent, TextField, Button, CardActions, ButtonGroup, Modal } from "@mui/material"
 import { Box } from "@mui/system"
 
-const PlayerCards = ({players}) => {
+import { useState } from "react"
 
-    const generateRandomColors = () => {
-        const colorNumber = () => {
-            return Math.floor(Math.random() * 255)
+const PlayerCards = ({players, setPlayers}) => {
+
+    const [scoreChange, setScoreChange] = useState()
+
+    const updateScore = (e, playerIndex, addOrSubtract, scoreChange) => {
+
+        scoreChange = Number.parseInt(scoreChange)
+        e.preventDefault()
+        if (scoreChange !== 0) {
+            if (addOrSubtract === 'add') {
+                setPlayers(prevState => {
+                    let newState = prevState
+                    const currentScore = newState[playerIndex].playerScore[newState[playerIndex].playerScore.length - 1]
+                    newState[playerIndex].playerScore.push(currentScore + scoreChange)
+                    return [...newState]
+                })
+            } else {
+                setPlayers(prevState => {
+                    let newState = prevState
+                    const currentScore = newState[playerIndex].playerScore[newState[playerIndex].playerScore.length - 1]
+                    newState[playerIndex].playerScore.push(currentScore - scoreChange)
+                    return [...newState]
+                })
+                setScoreChange()
+            }
+        } else {
+            alert('no change')
         }
-        return {red: colorNumber(), green: colorNumber(), blue: colorNumber()}
+    }
+
+    const ScoresModal = ({playerIndex, players}) => {
+        const [open, setOpen] = useState(false);
+        const handleOpen = () => setOpen(true);
+        const handleClose = () => setOpen(false); 
+
+        const style = {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            // bgcolor: 'background.paper',
+            bgcolor: 'White',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+          };
+
+        const showPlayerScores = players[playerIndex].playerScore.map((score, index) => {
+            return (
+                <Typography key={index}>{score}</Typography>    
+            )
+        })
+
+        return (
+            <Box>
+                <Button onClick={handleOpen}>Show Scores</Button>
+                <Modal
+                 open={open}
+                 onClose={handleClose}
+                 aria-labelledby="modal-ScoresModal-title"
+                 aria-describedby="modal-modal-description"
+                 >
+                    <Box sx={style}>
+                        <Typography>{showPlayerScores}</Typography>
+                    </Box>
+                </Modal>
+            </Box>
+        )
     }
 
     
-    const showPlayerCards = players.map(({playerName, playerScore, notes}, index) => {
-        const RGB = generateRandomColors()
+
+    const UpdatePlayerModal = ({playerIndex, players}) => {
+
+        const updateName = (e) => {
+            e.preventDefault()
+            setPlayers(prevState => {
+                let newState = prevState
+                newState[playerIndex].playerName = e.target.nameInput.value
+                return [...newState]
+            })    
+        }
+
+        const deletePlayer = (e) => {
+            e.preventDefault()
+            setPlayers(prevState => {
+                let newState = prevState
+                newState.splice(playerIndex, 1)
+                return [...newState]
+            })   
+        }
+
+        const [open, setOpen] = useState(false);
+        const handleOpen = () => setOpen(true);
+        const handleClose = () => setOpen(false); 
+
+        const style = {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            // bgcolor: 'background.paper',
+            bgcolor: 'White',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+          };
 
         return (
-            <Card sx={{
+            <Box>
+                <Button onClick={handleOpen}>Update Player</Button>
+                <Modal
+                 open={open}
+                 onClose={handleClose}
+                 aria-labelledby="modal-PlayerNameModal-title"
+                 aria-describedby="modal-modal-description"
+                 >
+                    <Box sx={style} component='form' onSubmit={(e) => updateName(e) }>
+                        <TextField
+                        name='nameInput'
+                        id="update-name-input"
+                        label="Update Name"
+                        type="text"
+                        defaultValue={players[playerIndex].playerName}
+                        />
+                        <Button variant="outlined" type="submit">Update</Button>
+                        <Button variant="outlined" onClick={(e) => deletePlayer(e)}>Delete Player</Button>
+                    </Box>
+                </Modal>
+            </Box>
+        )
+    }
+
+    
+    const showPlayerCards = players.map(({playerName, playerScore, notes, RGB}, index) => {
+
+        return (
+            <Card key={index} sx={{
                 maxWidth: '420px', 
                 margin: '16px'
             }}>
@@ -29,31 +156,34 @@ const PlayerCards = ({players}) => {
                     }}
                 />
                 <CardContent>
-                    <Typography variant="h5">{`Current Score: ${playerScore}`}</Typography>
-                    <Box sx={{
-                        // backgroundColor: 'blue',
-                        marginTop: '8px',
-                        marginBottom: '16px',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        flexWrap: 'wrap',
-                        minWidth: '100%'
-                    }}>
+                    <Typography variant="h5">{`Current Score: ${playerScore[playerScore.length - 1]}`}</Typography>
+                    <Box 
+                        sx={{
+                            // backgroundColor: 'blue',
+                            marginTop: '8px',
+                            marginBottom: '16px',
+                            display: 'flex',
+                            justifyContent: 'space-evenly',
+                            flexWrap: 'wrap',
+                            minWidth: '100%'
+                        }}>
                         <TextField
+                        name='scoreChange'
                         id="outlined-score-input"
                         label="Update Score"
                         type="number"
                         sx={{
-                            minWidth: '75%'
+                            // minWidth: '75%'
                         }}
+                        onChange={(e) => setScoreChange(e.target.value)}
                         />
                         <ButtonGroup 
                         sx={{
-                            minWidth: '25%'
+                            // minWidth: '25%'
                         }}
                         >
-                            <Button> + </Button>
-                            <Button> - </Button>
+                            <Button type="submit" onClick={(e) => updateScore(e, index, 'add', scoreChange)}>+ Add</Button>
+                            <Button type="submit" onClick={(e) => updateScore(e, index, 'subtract', scoreChange)}>- Subtract</Button>
                         </ButtonGroup>
                     </Box>
                     <TextField
@@ -72,8 +202,8 @@ const PlayerCards = ({players}) => {
                     justifyContent: 'center'
                 }}>
                     <ButtonGroup variant="outlined" aria-label="outlined button group">
-                        <Button>Show Scores</Button>
-                        <Button>Update Player</Button>
+                        <ScoresModal playerIndex={index} players={players} />
+                        <UpdatePlayerModal playerIndex={index} players={players} setPlayers={setPlayers} />
                     </ButtonGroup>
                 </CardActions>
             </Card>
