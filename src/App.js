@@ -1,6 +1,12 @@
 import './App.css';
-import PlayerCards from './components/PlayerCards';
+// import PlayerCards from './components/PlayerCards';
 import { useState } from "react"
+
+// MUI
+
+import { Container } from '@mui/system';
+import { Typography, Box, ButtonGroup, Button } from '@mui/material';
+import PlayerCard from './components/PlayerCards';
 
 function App() {
 
@@ -64,16 +70,22 @@ function App() {
     }  
 
   return (
-    <div className="App">
-      <h1>Score Keeper</h1>
-      <div id='button-div'>
-        <button onClick={() => addPlayer()}>Add Player</button>
-        <button onClick={() => removePlayer()}>Remove Player</button>
-      </div>
-      <div id='show-players-div'>
-        <PlayerCards players={players} setPlayers={setPlayers} updatePlayer={updatePlayer} removeSpecificPlayer={removeSpecificPlayer} addPlayer={addPlayer} removePlayer={removePlayer}/>
-      </div>
-    </div>
+    <>
+    <Container>
+        <Typography variant='h1'>Score Keeper</Typography>
+        <Box>
+            {/* <button onClick={() => addPlayer()}>Add Player</button>
+            <button onClick={() => removePlayer()}>Remove Player</button> */}
+            <ButtonGroup variant='outlined'>
+                <Button>Add Player</Button>
+                <Button>Remove Player</Button>
+            </ButtonGroup>
+        </Box>
+        <Box>
+            <PlayerCard players={players}/>
+        </Box>
+    </Container>
+    </>
   );
 }
 

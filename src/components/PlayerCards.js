@@ -1,70 +1,89 @@
+import { Typography, Card, CardHeader, CardContent, TextField, Button, CardActions, ButtonGroup } from "@mui/material"
+import { Box } from "@mui/system"
 
+const PlayerCards = ({players}) => {
 
-const PlayerCards = ({ players, setPlayers, updatePlayer, removeSpecificPlayer }) => {
-
-    const updateScore = (e, index) => {
-        e.preventDefault()
-
-        setPlayers(prevState => {
-            
-            let newState = prevState
-            console.log(newState[index].playerScore)
-            const updatedScore = newState[index].playerScore[newState[index].playerScore.length-1] + Number(e.target.playerScore.value)
-            newState[index].playerScore.push(updatedScore)
-            return ([...newState])
-        })
-    }
-
-    const flipCard = (e, index) => {
-        setPlayers(prevState => {
-            
-            let newState = prevState
-            
-            if (newState[index].showBack === false) {
-                newState[index].showBack = true
-            } else {
-                newState[index].showBack = false
-            }
-
-            
-
-            return (
-                [...prevState]
-            )
-        })
-    }
- 
-    
-
-    let showPlayers = players.map((element, index) => {
-
-        if (element.showBack === true) {
-            return (
-                <div key={index} className="player-div">
-                    <h1>flipCard</h1>
-                    <button onClick={(e) => flipCard(e, index)}>flip</button>
-                </div>
-            )
-        } else {
-            return (
-                <div key={index} className="player-div">
-                    <input className="player-title-input" type="text" name="playerName" value={element.playerName} onChange={(e) => updatePlayer(e, index)}/>   
-                    <h2>{`Current Score: ${element.playerScore[element.playerScore.length-1]}`}</h2>
-                    <form onSubmit={(e) => updateScore(e, index)} className="score-input-div">
-                        <input className="player-score-input" type="number" name="playerScore" placeholder="score"/>
-                        <button type="submit">Update</button>
-                    </form>
-                    <textarea className="player-notes-input" type="textarea" name="notes" value={element.notes} onChange={(e) => updatePlayer(e, index)}/>
-                    {/* <button name={index} onClick={(e) => removeSpecificPlayer(e)}>Remove Player</button> */}
-                    <button name={index} onClick={(e) => flipCard(e, index)}>Show Scores</button>
-                </div>
-            )
+    const generateRandomColors = () => {
+        const colorNumber = () => {
+            return Math.floor(Math.random() * 255)
         }
+        return {red: colorNumber(), green: colorNumber(), blue: colorNumber()}
+    }
+
+    
+    const showPlayerCards = players.map(({playerName, playerScore, notes}, index) => {
+        const RGB = generateRandomColors()
+
+        return (
+            <Card sx={{
+                maxWidth: '420px', 
+                margin: '16px'
+            }}>
+                <CardHeader
+                    title={playerName}
+                    sx={{
+                        paddingTop: '8px',
+                        paddingBottom: '8px',
+                        backgroundColor: `rgb(${RGB.red}, ${RGB.green}, ${RGB.blue})`,
+                        color: 'white'
+                    }}
+                />
+                <CardContent>
+                    <Typography variant="h5">{`Current Score: ${playerScore}`}</Typography>
+                    <Box sx={{
+                        // backgroundColor: 'blue',
+                        marginTop: '8px',
+                        marginBottom: '16px',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        minWidth: '100%'
+                    }}>
+                        <TextField
+                        id="outlined-score-input"
+                        label="Update Score"
+                        type="number"
+                        sx={{
+                            minWidth: '75%'
+                        }}
+                        />
+                        <ButtonGroup 
+                        sx={{
+                            minWidth: '25%'
+                        }}
+                        >
+                            <Button> + </Button>
+                            <Button> - </Button>
+                        </ButtonGroup>
+                    </Box>
+                    <TextField
+                    id="outlined-multiline-static"
+                    label="Notes"
+                    multiline
+                    rows={6}
+                    defaultValue={notes}
+                    sx={{
+                        minWidth: '100%',
+                    }}
+                    />
+                </CardContent>
+                <CardActions sx={{
+                    display: 'flex', 
+                    justifyContent: 'center'
+                }}>
+                    <ButtonGroup variant="outlined" aria-label="outlined button group">
+                        <Button>Show Scores</Button>
+                        <Button>Update Player</Button>
+                    </ButtonGroup>
+                </CardActions>
+            </Card>
+        )
     })
+
 
     return (
         <>
-        {showPlayers}
+            {showPlayerCards}
         </>
     )
 }
