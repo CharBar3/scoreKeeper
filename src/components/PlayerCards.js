@@ -8,23 +8,22 @@ const PlayerCards = ({players, setPlayers}) => {
     const [scoreChange, setScoreChange] = useState()
 
     const updateScore = (e, playerIndex, addOrSubtract, scoreChange) => {
-
-        scoreChange = Number.parseInt(scoreChange)
         e.preventDefault()
-        console.log(typeof scoreChange)
-        if (scoreChange !== 0 && typeof scoreChange === 'number') {
+
+        const parsedScoreChange = Number.parseInt(scoreChange)
+        if (parsedScoreChange !== 0 && Number.isNaN(parsedScoreChange) === false) {
             if (addOrSubtract === 'add') {
                 setPlayers(prevState => {
                     let newState = prevState
                     const currentScore = newState[playerIndex].playerScore[newState[playerIndex].playerScore.length - 1]
-                    newState[playerIndex].playerScore.push(currentScore + scoreChange)
+                    newState[playerIndex].playerScore.push(currentScore + parsedScoreChange)
                     return [...newState]
                 })
             } else {
                 setPlayers(prevState => {
                     let newState = prevState
                     const currentScore = newState[playerIndex].playerScore[newState[playerIndex].playerScore.length - 1]
-                    newState[playerIndex].playerScore.push(currentScore - scoreChange)
+                    newState[playerIndex].playerScore.push(currentScore - parsedScoreChange)
                     return [...newState]
                 })
                 setScoreChange()
